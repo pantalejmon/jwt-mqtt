@@ -14,7 +14,7 @@ export class Broker {
         "realm": "mqtt",
         "auth-server-url": "http://192.168.178.42:8080",
         "client_id": "your client name",
-        "client_secret": "c88a2c21-9d1a-4f83-a18d-66d75c4d8020", // if required
+        "client_secret": "c88a2c21-9d1a-4f83-a18d-66d75c4d8020",
         "username": "admin",
         "password": "admin"
     });
@@ -28,14 +28,12 @@ export class Broker {
     async checkToken(client: Client, data: AedesPublishPacket, callback) {
         if (client && data.topic === this.CONFIG_TOPIC) {
             const token: string = <string>data.payload.toString();
-            console.log('Token ' + token);
             const recognizedToken: any = await this.keycloak.jwt.verify(token);
             if (recognizedToken.content.sub === client.id) this.tokens.push({
                 client,
                 token,
                 topics: recognizedToken.content.realm_access.roles
             })
-            console.log(this.tokens)
         } else if (client && data.topic !== this.CONFIG_TOPIC) {
             try {
                 if (this.checkPublish(data.topic, this.findTopics(client))) {

@@ -1,6 +1,6 @@
 {
   "name": "jwt-mqtt",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -42,7 +42,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pantalejmon/s-mqtt"
+    "url": "https://github.com/pantalejmon/jwt-mqtt"
   },
   "dependencies": {
     "@types/eccrypto": "^1.1.1",

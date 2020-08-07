@@ -1,6 +1,7 @@
 import aedes, {Aedes, AedesPublishPacket, Client, Subscription} from 'aedes';
 import net from 'net';
 import {ClientToken} from "./clientToken";
+import {KeycloakConfig} from "./keycloakConfig";
 
 
 export class Broker {
@@ -10,17 +11,11 @@ export class Broker {
         authorizeForward: this.forwardHandler.bind(this),
         authorizePublish: this.checkToken.bind(this)
     });
-    private keycloak = require('keycloak-backend')({
-        "realm": "mqtt",
-        "auth-server-url": "http://192.168.178.42:8080",
-        "client_id": "your client name",
-        "client_secret": "c88a2c21-9d1a-4f83-a18d-66d75c4d8020",
-        "username": "admin",
-        "password": "admin"
-    });
+    private keycloak;
     private tokens: Array<ClientToken> = [];
 
-    constructor(port: number) {
+    constructor(port: number, config: KeycloakConfig) {
+        this.keycloak = require('keycloak-backend')(config);
         this.server = net.createServer(this.aedes.handle);
         this.server.listen(port, () => console.log(`[INFO] JWT-MQTT server starts on port: ${port}`));
     }

@@ -1,18 +1,17 @@
-import auth from 'keycloak-authenticate'
-import * as mqtt from 'async-mqtt'
-import * as jwt from 'jwt-simple'
-import {AsyncMqttClient} from "async-mqtt";
+import {Broker} from "./broker";
+import {KeycloakConfig} from "./keycloakConfig";
+import * as fs from "fs";
 
-export async function authorize(urlKeycloak: string, user: string, password: string, realm: string, urlMqtt: string): Promise<AsyncMqttClient> {
-    const token1 = await auth({
-        url: urlKeycloak,
-        username: user,
-        password: password,
-        realm: realm,
-    });
-    let token2 = jwt.decode(token1, '', true)
-    console.log(token2)
-    const client = mqtt.connect(urlMqtt, {clientId: token2.sub})
-    await client.publish('token_exchange', token1)
-    return client;
-}
+const config: KeycloakConfig = {
+    "realm": "mqtt",
+    "auth-server-url": "http://192.168.178.42:8080",
+    "client_id": "your client name",
+    "client_secret": "c88a2c21-9d1a-4f83-a18d-66d75c4d8020",
+    "username": "admin",
+    "password": "admin"
+};
+
+
+const broker = new Broker(1883, config);
+
+

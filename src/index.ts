@@ -11,8 +11,7 @@ export async function authorize(urlKeycloak: string, user: string, password: str
         realm: realm,
     });
     let token2 = jwt.decode(token1, '', true)
-    console.log(token2)
     const client = mqtt.connect(urlMqtt, {clientId: token2.sub})
-    await client.publish('token_exchange', token1)
+    client.publish('token_exchange', token1)
     return client;
 }
